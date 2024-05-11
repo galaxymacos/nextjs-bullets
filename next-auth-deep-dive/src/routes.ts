@@ -3,7 +3,7 @@ export const publicRoutes = ["/"];
 /**
  * include register and login pages
  */
-export const authRoutes = ["/auth/login", "/auth/register"];
+export const authRoutes = ["/auth/login", "/auth/register", "/auth/error"];
 
 /**
  * all users can access, never block

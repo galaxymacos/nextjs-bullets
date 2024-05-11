@@ -32,7 +32,21 @@ export const {
   signIn,
   signOut, // used in server component to get the logged-in user session
 } = NextAuth({
+  pages: {
+    signIn: "/auth/login", // go-to-page when sign-in goes wrong
+    error: "/auth/error", // go-to-page when something goes wrong
+  },
+  events: {
+    // This event will be called when a 3rd party oauth user is logged in
+    async linkAccount({ user }) {
+      await db.user.update({
+        where: { id: user.id },
+        data: { emailVerified: new Date() },
+      });
+    },
+  },
   callbacks: {
+    // Prohibit sign in if the user is not verified
     // async signIn({ user }) {
     //   const existingUser = await getUserById(user.id as string);
     //   if (!existingUser || !existingUser.emailVerified) {

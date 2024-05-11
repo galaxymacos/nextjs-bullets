@@ -18,6 +18,15 @@ interface CardWrapperProps {
   showSocial?: boolean;
 }
 
+/**
+ * A card used to show anything related to authentication, such as login, signout, forgot password
+ * @param children
+ * @param headerLabel
+ * @param backButtonLabel
+ * @param backButtonHref
+ * @param showSocial
+ * @constructor
+ */
 const CardWrapper = ({
   children,
   headerLabel,
@@ -31,9 +40,7 @@ const CardWrapper = ({
         <Header label={headerLabel} />
       </CardHeader>
       <CardContent>{children}</CardContent>
-      <CardFooter>
-        <Social />
-      </CardFooter>
+      <CardFooter>{showSocial && <Social />}</CardFooter>
       <CardFooter>
         <BackButton href={backButtonHref} label={backButtonLabel} />
       </CardFooter>
