@@ -1,9 +1,12 @@
 import { PrismaClient } from "@prisma/client";
-import { Pool } from "@neondatabase/serverless";
+import { Pool, neonConfig } from "@neondatabase/serverless";
 import { PrismaNeon } from "@prisma/adapter-neon";
+import ws from "ws";
 
 const prismaClientSingleton = () => {
-  const connectionString = process.env.POSTGRES_PRISMA_URL;
+  neonConfig.webSocketConstructor = ws;
+  const connectionString =
+    "postgres://default:SaGgHuLqi4Y5@ep-fragrant-pine-a1jd05tu-pooler.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require&pgbouncer=true&connect_timeout=15";
   const pool = new Pool({ connectionString });
   const adapter = new PrismaNeon(pool);
   return new PrismaClient({ adapter });
