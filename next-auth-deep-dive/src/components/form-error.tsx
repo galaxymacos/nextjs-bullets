@@ -7,7 +7,7 @@ interface FormErrorProps {
 import React from "react";
 
 // A div that shows an error message when passing a message prop
-const FormError = ({ message }: FormErrorProps) => {
+export const FormError = ({ message }: FormErrorProps) => {
   if (!message) {
     return null;
   }
@@ -22,5 +22,3 @@ const FormError = ({ message }: FormErrorProps) => {
     </div>
   );
 };
-
-export default FormError;

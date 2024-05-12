@@ -7,7 +7,7 @@ interface FormSuccessProps {
 import React from "react";
 
 // A div that shows an green message div when passing a message prop
-const FormSuccess = ({ message }: FormSuccessProps) => {
+export const FormSuccess = ({ message }: FormSuccessProps) => {
   if (!message) {
     return null;
   }
@@ -22,5 +22,3 @@ const FormSuccess = ({ message }: FormSuccessProps) => {
     </div>
   );
 };
-
-export default FormSuccess;
