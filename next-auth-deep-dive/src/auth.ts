@@ -46,14 +46,21 @@ export const {
     },
   },
   callbacks: {
-    // Prohibit sign in if the user is not verified
-    // async signIn({ user }) {
-    //   const existingUser = await getUserById(user.id as string);
-    //   if (!existingUser || !existingUser.emailVerified) {
-    //     return false;
-    //   }
-    //   return true;
-    // },
+    async signIn({ user, account }) {
+      // Allow Oauth without email verification
+      if (account?.provider !== "credentials") return true;
+      if (!user) {
+        return false;
+      }
+      const existingUser = await getUserById(user.id as string);
+
+      // Prevent sign in without email verification
+      if (!existingUser?.emailVerified) {
+        return false;
+      }
+      // TODO: add 2FA check
+      return true;
+    },
     async session({ token, session }) {
       // NOTE: this token can be changed
       console.log({ sessionToken: token });
