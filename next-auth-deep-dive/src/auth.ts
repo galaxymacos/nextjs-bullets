@@ -7,10 +7,10 @@ import { JWT } from "next-auth/jwt";
 import { UserRole } from "@prisma/client";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 
-type ExtendedUser = DefaultSession["user"] & {
+export type ExtendedUser = DefaultSession["user"] & {
   // fields to extend
-  customField: string;
   role: UserRole;
+  isTwoFactorEnabled: boolean;
 };
 // Extend the NextAuth session and JWT types
 declare module "next-auth" {
@@ -86,6 +86,9 @@ export const {
         // token.role is assigned below
         session.user.role = token.role;
       }
+      if (token.isTwoFactorEnabled && session.user) {
+        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
+      }
       return session;
     },
     async jwt({ token }) {
@@ -93,6 +96,7 @@ export const {
       const existingUser = await getUserById(token.sub);
       if (!existingUser) return token;
       token.role = existingUser.role;
+      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
       return token;
     },
   },
