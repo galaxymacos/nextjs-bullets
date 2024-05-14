@@ -7,7 +7,7 @@ import { SettingsSchema } from "@/schemas";
 import { getUserByEmail, getUserById } from "@/data/user";
 import { currentUser } from "@/lib/auth";
 import { generateVerificationToken } from "@/lib/tokens";
-import { sendVerificationEmail } from "@/lib/mail";
+import { sendVerificationLinkEmail } from "@/lib/mail";
 import bcrypt from "bcryptjs";
 
 /**
@@ -39,7 +39,7 @@ export const settings = async (values: z.infer<typeof SettingsSchema>) => {
       return { error: "Email already in use" };
     }
     const verificationToken = await generateVerificationToken(values.email);
-    await sendVerificationEmail(
+    await sendVerificationLinkEmail(
       verificationToken.email,
       verificationToken.token,
     );

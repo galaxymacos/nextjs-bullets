@@ -9,6 +9,7 @@ const prismaClientSingleton = () => {
   return new PrismaClient({ adapter });
 };
 
+// prevent multiple instances of Prisma Client in development
 declare const globalThis: {
   prismaGlobal: ReturnType<typeof prismaClientSingleton>;
 } & typeof global;

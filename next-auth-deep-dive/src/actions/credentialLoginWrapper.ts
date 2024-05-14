@@ -9,13 +9,13 @@ import {
   generateTwoFactorToken,
 } from "@/lib/tokens";
 import { getUserByEmail } from "@/data/user";
-import { sendVerificationEmail, sendTwoFactorTokenEmail } from "@/lib/mail";
+import { sendVerificationLinkEmail, sendTwoFactorTokenEmail } from "@/lib/mail";
 import { getTwoFactorTokenByEmail } from "@/data/two-factor-token";
 import { db } from "@/lib/db";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 // A wrapper to Auth.js login, to block users who have not verified their emails
 // Only for credential login, not for social logins
-export const login = async (
+export const credentialLoginWrapper = async (
   values: z.infer<typeof LoginSchema>,
   callbackUrl?: string | null,
 ) => {
@@ -33,7 +33,7 @@ export const login = async (
     const verificationToken = await generateVerificationToken(
       existingUser.email,
     );
-    await sendVerificationEmail(
+    await sendVerificationLinkEmail(
       verificationToken.email,
       verificationToken.token,
     );

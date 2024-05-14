@@ -12,10 +12,7 @@ export const SettingsSchema = z
   })
   .refine(
     (data) => {
-      if (data.password && !data.newPassword) {
-        return false;
-      }
-      return true;
+      return !(data.password && !data.newPassword);
     },
     {
       message: "New password is required!",
@@ -24,10 +21,7 @@ export const SettingsSchema = z
   )
   .refine(
     (data) => {
-      if (data.newPassword && !data.password) {
-        return false;
-      }
-      return true;
+      return !(data.newPassword && !data.password);
     },
     {
       message: "Password is required!",
@@ -45,12 +39,21 @@ export const LoginSchema = z.object({
   }), // NOTE: don't limit login
   code: z.optional(z.string()),
 });
+
+/**
+ * Used for entering new password when redirected from email
+ * password, newPassword: required
+ */
 export const NewPasswordSchema = z.object({
   password: z.string().min(6, {
     message: "Minimum 6 characters required",
   }),
 });
 
+/**
+ * Used for resetting password by providing the user email
+ * Email: required
+ */
 export const ResetSchema = z.object({
   email: z
     .string()
@@ -58,6 +61,9 @@ export const ResetSchema = z.object({
     .email({ message: "Invalid email address" }),
 });
 
+/**
+ * Email, name, password: required
+ */
 export const RegisterSchema = z.object({
   email: z
     .string()
