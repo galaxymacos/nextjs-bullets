@@ -77,7 +77,7 @@ export const UserInfo = ({ user, label }: UserInfoProps) => {
           }
         >
           <p className={"text-sm font-medium"}>Two Factor Authentication</p>
-          <p
+          <div
             className={
               "truncate text-xs max-w-[180px] font-mono p-1 bg-slate-100 rounded-md"
             }
@@ -87,7 +87,7 @@ export const UserInfo = ({ user, label }: UserInfoProps) => {
             >
               {user?.isTwoFactorEnabled ? "On" : "Off"}
             </Badge>
-          </p>
+          </div>
         </div>
       </CardContent>
     </Card>

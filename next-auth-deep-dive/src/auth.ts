@@ -6,11 +6,13 @@ import { getUserById } from "@/data/user";
 import { JWT } from "next-auth/jwt";
 import { UserRole } from "@prisma/client";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
+import { getAccountByUserId } from "@/data/account";
 
 export type ExtendedUser = DefaultSession["user"] & {
-  // fields to extend
+  // fields to extend when we access user in the sessino
   role: UserRole;
   isTwoFactorEnabled: boolean;
+  isOAuth: boolean;
 };
 // Extend the NextAuth session and JWT types
 declare module "next-auth" {
@@ -86,8 +88,15 @@ export const {
         // token.role is assigned below
         session.user.role = token.role;
       }
-      if (token.isTwoFactorEnabled && session.user) {
+      if (session.user) {
         session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
+      }
+
+      if (session.user) {
+        session.user.name = token.name;
+        session.user.email = token.email as string;
+        session.user.isOAuth = token.isOAuth as boolean;
+        session.user.role = token.role as UserRole;
       }
       return session;
     },
@@ -95,6 +104,10 @@ export const {
       if (!token.sub) return token; // no user id
       const existingUser = await getUserById(token.sub);
       if (!existingUser) return token;
+      const existingAccount = await getAccountByUserId(existingUser.id);
+      token.isOAuth = !!existingAccount;
+      token.name = existingUser.name;
+      token.email = existingUser.email;
       token.role = existingUser.role;
       token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
       return token;
