@@ -185,7 +185,7 @@ const SettingsPage = () => {
                       <Switch
                         disabled={isPending}
                         checked={field.value}
-                        onChange={field.onChange}
+                        onCheckedChange={field.onChange}
                       />
                     </FormControl>
 
